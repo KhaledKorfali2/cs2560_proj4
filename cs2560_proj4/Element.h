@@ -1,13 +1,11 @@
 #pragma once
-#include<string>
 
 using namespace std;
 struct Element {
 	int atomicNum;
 	double mass;
-	string name;
-	string nameAbbriv;
-	Element* next;
+	std::string name;
+	std::string nameAbbriv;
 };
 
 Element** get_table(int& size);

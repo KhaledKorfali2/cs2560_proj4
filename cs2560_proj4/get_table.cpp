@@ -5,70 +5,59 @@
 
 using namespace std;
 
+struct Node {
+    Element* element;
+    Node* next;
+};
+
 Element** get_table(int& size) {
-    Element* head = nullptr;
-    Element* tail = nullptr;
+    Node* head = nullptr;
+    Node* tail = nullptr;
     string line;
-    ifstream file("periodictable.dat");
-    if (file.is_open()) {
-        while (getline(file, line)) {
-            Element* new_element = new Element;
-            if (!new_element) {
-                cerr << "Error: Memory allocation failed for new_element" << endl;
-                while (head) {
-                    Element* temp = head;
-                    head = head->next;
-                    delete temp;
-                }
-                return nullptr;
+    size = 0;
+
+    ifstream inFile("periodictable.dat");
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            Element* element = new Element;
+            inFile >> element->atomicNum >> element->nameAbbriv >> element->mass >> element->name;
+            if (!inFile.good()) {
+                delete element;
+                break;
             }
-            size_t pos = 0;
-            string token;
-            pos = line.find('\t');
-            token = line.substr(0, pos);
-            new_element->name = token;
-            line.erase(0, pos + 1);
-            pos = line.find('\t');
-            token = line.substr(0, pos);
-            new_element->nameAbbriv = token;
-            line.erase(0, pos + 1);
-            pos = line.find('\t');
-            token = line.substr(0, pos);
-            new_element->atomicNum = stoi(token);
-            line.erase(0, pos + 1);
-            new_element->mass = stod(line);
-            new_element->next = nullptr;
-            if (!head) {
-                head = new_element;
-                tail = new_element;
+            size++;
+            Node* node = new Node{ element, nullptr };
+            if (head == nullptr) {
+                head = node;
+                tail = node;
             }
             else {
-                tail->next = new_element;
-                tail = new_element;
+                tail->next = node;
+                tail = node;
             }
         }
-        file.close();
     }
-    else {
-        cerr << "Error: Could not open file" << endl;
-        return nullptr;
+    else 
+    {
+        cerr << "Error Can't open file" << endl;
     }
-    Element** table = new Element * [size];
-    if (!table) {
-        cerr << "Error: Memory allocation failed for table" << endl;
-        while (head) {
-            Element* temp = head;
-            head = head->next;
-            delete temp;
-        }
-        return nullptr;
+    inFile.close();
+
+    
+    Node* node = head;
+  /*  while (node != nullptr) {
+        numElements++;
+        node = node->next;
+    }*/
+
+    Element** elements = new Element * [size];
+    //node = head;
+    for (int i = 0; i < size; i++) {
+        elements[i] = node->element;
+        Node* temp = node;
+        node = node->next;
+        delete temp;
     }
-    int i = 0;
-    while (head) {
-        table[i] = head;
-        head = head->next;
-        i++;
-    }
-    size = i;
-    return table;
+
+    return elements;
 }

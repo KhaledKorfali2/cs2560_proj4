@@ -146,6 +146,9 @@
   <ItemGroup>
     <ClInclude Include="Element.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="periodictable.dat" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
