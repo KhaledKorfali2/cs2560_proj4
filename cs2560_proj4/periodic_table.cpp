@@ -38,7 +38,7 @@ int main() {
 	}
 
 	// Sort table in order of element name (a to z)
-	//selectionSort(table, size);
+	selectionSort(table, size);
 
 	// Print the periodic table using the sorted array of Element pointers
 	print_table(table, size);
