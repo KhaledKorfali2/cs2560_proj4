@@ -36,6 +36,19 @@ Element** get_table(int& size) {
 
 	// Check if the file was successfully opened
 	if (inFile.is_open()) {
+
+		// Read the first element in the file (without this the program skips over it)
+		Element* element = new Element;
+		inFile >> element->atomicNum >> element->nameAbbriv >> element->mass >> element->name;
+		//cout << element->name << endl;
+		size++;
+
+		// Create a new node and add it to the linked list
+		Node* node = new Node{ element, nullptr };
+		head = node;
+		tail = node;
+
+
 		// Read each line in the file
 		while (getline(inFile, line)) {
 			// Create a new Element object
@@ -43,7 +56,7 @@ Element** get_table(int& size) {
 
 			// Read the atomic number, abbreviation, mass, and name of the element from the file
 			inFile >> element->atomicNum >> element->nameAbbriv >> element->mass >> element->name;
-
+			//cout << element->name << endl;
 			// Check if there was an error reading from the file
 			if (!inFile.good()) {
 				delete element; // Delete the Element object if there was an error
@@ -59,6 +72,7 @@ Element** get_table(int& size) {
 				tail = node;
 			}
 			else {
+				//cout << "tail" + node->element->name << endl;
 				tail->next = node;
 				tail = node;
 			}
@@ -78,6 +92,7 @@ Element** get_table(int& size) {
 	// Convert the linked list to an array
 	Element** elements = new Element * [size];
 	for (int i = 0; i < size; i++) {
+		//cout << "head" + node->element->name << endl;
 		elements[i] = node->element;// Add the current element to the array
 		Node* temp = node;// Move to the next node in the linked list
 		node = node->next;
